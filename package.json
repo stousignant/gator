@@ -1,0 +1,26 @@
+{
+    "name": "gator",
+    "version": "1.0.0",
+    "description": "CLI tool that allows users to:",
+    "main": "index.js",
+    "scripts": {
+        "start": "tsx ./src/index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/stousignant/gator.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/stousignant/gator/issues"
+    },
+    "homepage": "https://github.com/stousignant/gator#readme",
+    "devDependencies": {
+        "@types/node": "^25.0.1",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3"
+    }
+}
