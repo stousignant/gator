@@ -1,5 +1,5 @@
-import { setUser } from "../config";
-import { createUser, getUserByName, reset } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../config";
+import { createUser, getUserByName, getUsers, reset } from "../lib/db/queries/users";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -38,6 +38,22 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
     // Print success message and log user data
     console.log(`User "${userName}" was created successfully.`);
     console.log("User data:", user);
+}
+
+export async function handlerUsers(cmdName: string, ...args: string[]) {
+    if (args.length !== 0) {
+        throw new Error(`usage: ${cmdName}`);
+    }
+
+    const users = await getUsers();
+    const config = readConfig();
+    const currentUserName = config.currentUserName;
+
+    for (const user of users) {
+        const isCurrent = user.name === currentUserName;
+        const suffix = isCurrent ? " (current)" : "";
+        console.log(`* ${user.name}${suffix}`);
+    }
 }
 
 export async function handlerReset(cmdName: string, ...args: string[]) {

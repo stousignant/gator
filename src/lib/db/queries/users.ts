@@ -27,6 +27,16 @@ export async function getUserByName(name: string) {
     }
 }
 
+export async function getUsers() {
+    try {
+        const result = await db.select().from(users);
+        return result;
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to query users: ${errorMessage}`);
+    }
+}
+
 export async function reset() {
     await db.delete(users);
 }
