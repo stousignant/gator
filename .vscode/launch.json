@@ -69,6 +69,30 @@
             ]
         },
         {
+            "name": "Debug: addfeed command",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "tsx",
+            "runtimeArgs": [],
+            "args": [
+                "./src/index.ts",
+                "addfeed",
+                "Hacker News RSS",
+                "https://hnrss.org/newest"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**",
+                "!**/node_modules/**"
+            ]
+        },
+        {
             "name": "Debug: Custom Command",
             "type": "node",
             "request": "launch",

@@ -1,6 +1,8 @@
 import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands";
 import { handlerAgg } from "./commands/agg";
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
+import { handlerAddFeed } from "./commands/addfeed";
+import { handlerFeeds } from "./commands/feeds";
 
 async function main() {
     const args = process.argv.slice(2);
@@ -18,6 +20,8 @@ async function main() {
     registerCommand(commandsRegistry, "register", handlerRegister);
     registerCommand(commandsRegistry, "reset", handlerReset);
     registerCommand(commandsRegistry, "users", handlerUsers);
+    registerCommand(commandsRegistry, "addfeed", handlerAddFeed);
+    registerCommand(commandsRegistry, "feeds", handlerFeeds);
 
     try {
         await runCommand(commandsRegistry, cmdName, ...cmdArgs);
