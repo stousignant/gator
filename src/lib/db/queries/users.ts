@@ -26,3 +26,7 @@ export async function getUserByName(name: string) {
         throw new Error(`Failed to query user: ${errorMessage}`);
     }
 }
+
+export async function reset() {
+    await db.delete(users);
+}
