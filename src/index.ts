@@ -1,24 +1,28 @@
-import { CommandsRegistry, registerCommand, handlerLogin, runCommand } from "./commands/commands";
+import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands";
+import { handlerLogin, handlerRegister } from "./commands/users";
 
-function main() {
-    const commandsRegistry: CommandsRegistry = { commands: {} };
-    registerCommand(commandsRegistry, "login", handlerLogin);
-
+async function main() {
     const args = process.argv.slice(2);
 
     if (args.length < 1) {
-        console.error("Error: Not enough arguments provided.");
+        console.log("usage: cli <command> [args...]");
         process.exit(1);
     }
 
     const [cmdName, ...cmdArgs] = args;
+    const commandsRegistry: CommandsRegistry = {};
+
+    registerCommand(commandsRegistry, "login", handlerLogin);
+    registerCommand(commandsRegistry, "register", handlerRegister);
 
     try {
-        runCommand(commandsRegistry, cmdName, ...cmdArgs);
+        await runCommand(commandsRegistry, cmdName, ...cmdArgs);
     } catch (error) {
         console.error(error instanceof Error ? error.message : String(error));
         process.exit(1);
     }
+
+    process.exit(0);
 }
 
 main();
