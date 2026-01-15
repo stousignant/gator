@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "..";
 import { feeds, users } from "../schema";
 
@@ -46,5 +46,37 @@ export async function getFeedByUrl(url: string) {
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
         throw new Error(`Failed to query feed by URL: ${errorMessage}`);
+    }
+}
+
+export async function markFeedFetched(feedId: string) {
+    try {
+        const now = new Date();
+        const [result] = await db
+            .update(feeds)
+            .set({
+                lastFetchedAt: now,
+                updatedAt: now,
+            })
+            .where(eq(feeds.id, feedId))
+            .returning();
+        return result;
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to mark feed as fetched: ${errorMessage}`);
+    }
+}
+
+export async function getNextFeedToFetch() {
+    try {
+        const [result] = await db
+            .select()
+            .from(feeds)
+            .orderBy(sql`${feeds.lastFetchedAt} ASC NULLS FIRST`)
+            .limit(1);
+        return result;
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to get next feed to fetch: ${errorMessage}`);
     }
 }
