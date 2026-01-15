@@ -23,6 +23,29 @@
             ]
         },
         {
+            "name": "Debug: login command",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "tsx",
+            "runtimeArgs": [],
+            "args": [
+                "./src/index.ts",
+                "login",
+                "lane"
+            ],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "sourceMaps": true,
+            "resolveSourceMapLocations": [
+                "${workspaceFolder}/**",
+                "!**/node_modules/**"
+            ]
+        },
+        {
             "name": "Debug: register command",
             "type": "node",
             "request": "launch",

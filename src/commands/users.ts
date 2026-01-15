@@ -7,8 +7,13 @@ export async function handlerLogin(cmdName: string, ...args: string[]) {
     }
 
     const userName = args[0];
-    setUser(userName);
-    console.log(`Username ${userName} has been successfully set.`);
+    const existingUser = await getUserByName(userName);
+    if (!existingUser) {
+        throw new Error(`User "${userName}" does not exist`);
+    }
+
+    setUser(existingUser.name);
+    console.log(`Username ${existingUser.name} has been successfully set.`);
 }
 
 export async function handlerRegister(cmdName: string, ...args: string[]) {
