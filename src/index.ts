@@ -1,4 +1,4 @@
-import { CommandsRegistry, registerCommand, handlerLogin, runCommand } from "./commandHandler";
+import { CommandsRegistry, registerCommand, handlerLogin, runCommand } from "./commands/commands";
 
 function main() {
     const commandsRegistry: CommandsRegistry = { commands: {} };
