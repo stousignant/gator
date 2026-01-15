@@ -1,4 +1,5 @@
 import { CommandsRegistry, registerCommand, runCommand } from "./commands/commands";
+import { handlerAgg } from "./commands/agg";
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
 
 async function main() {
@@ -12,6 +13,7 @@ async function main() {
     const [cmdName, ...cmdArgs] = args;
     const commandsRegistry: CommandsRegistry = {};
 
+    registerCommand(commandsRegistry, "agg", handlerAgg);
     registerCommand(commandsRegistry, "login", handlerLogin);
     registerCommand(commandsRegistry, "register", handlerRegister);
     registerCommand(commandsRegistry, "reset", handlerReset);
