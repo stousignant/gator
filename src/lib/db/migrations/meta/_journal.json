@@ -15,6 +15,13 @@
       "when": 1768496247276,
       "tag": "0001_keen_ben_urich",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768496936957,
+      "tag": "0002_panoramic_moonstone",
+      "breakpoints": true
     }
   ]
 }

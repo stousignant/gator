@@ -38,3 +38,13 @@ export async function getFeedsWithUsers() {
         throw new Error(`Failed to query feeds: ${errorMessage}`);
     }
 }
+
+export async function getFeedByUrl(url: string) {
+    try {
+        const [result] = await db.select().from(feeds).where(eq(feeds.url, url));
+        return result;
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        throw new Error(`Failed to query feed by URL: ${errorMessage}`);
+    }
+}

@@ -1,6 +1,7 @@
 import { readConfig } from "../config";
 import { getUserByName } from "../lib/db/queries/users";
 import { createFeed } from "../lib/db/queries/feeds";
+import { createFeedFollow } from "../lib/db/queries/feed_follows";
 import { feeds, users } from "../lib/db/schema";
 
 export type Feed = typeof feeds.$inferSelect;
@@ -33,6 +34,10 @@ export async function handlerAddFeed(cmdName: string, ...args: string[]) {
     // Create the feed
     const feed = await createFeed(name, url, currentUser.id);
 
-    // Print the feed information
-    printFeed(feed, currentUser);
+    // Automatically create a feed follow record for the current user
+    const feedFollow = await createFeedFollow(currentUser.id, feed.id);
+
+    // Print the feed name and current user name
+    console.log(`Feed: ${feedFollow.feedName}`);
+    console.log(`User: ${feedFollow.userName}`);
 }
