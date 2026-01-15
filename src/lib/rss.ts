@@ -3,8 +3,8 @@ import { XMLParser } from "fast-xml-parser";
 export type RSSItem = {
     title: string;
     link: string;
-    description: string;
-    pubDate: string;
+    description?: string;
+    pubDate?: string;
 };
 
 export type RSSFeed = {
@@ -61,10 +61,10 @@ export async function fetchFeed(feedURL: string): Promise<RSSFeed> {
         }
     }
 
-    // Filter items to only include those with all required fields
+    // Filter items to only include those with required fields (title and link)
     const validItems: RSSItem[] = [];
     for (const item of items) {
-        if (item.title && item.link && item.description && item.pubDate) {
+        if (item.title && item.link) {
             validItems.push({
                 title: item.title,
                 link: item.link,

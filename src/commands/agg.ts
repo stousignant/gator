@@ -1,5 +1,6 @@
 import { fetchFeed } from "../lib/rss";
 import { getNextFeedToFetch, markFeedFetched } from "../lib/db/queries/feeds";
+import { createPost } from "../lib/db/queries/posts";
 
 function parseDuration(durationStr: string): number {
     const regex = /^(\d+)(ms|s|m|h)$/;
@@ -47,6 +48,27 @@ function formatDuration(durationStr: string): string {
     return durationStr;
 }
 
+function parsePublishedDate(dateStr: string | null | undefined): Date | null {
+    if (!dateStr) {
+        return null;
+    }
+
+    // Try parsing with Date constructor first (handles ISO 8601, RFC 2822, etc.)
+    const date = new Date(dateStr);
+
+    // Check if the date is valid
+    if (!isNaN(date.getTime())) {
+        return date;
+    }
+
+    // If Date constructor fails, try some common RSS date formats manually
+    // RSS feeds often use RFC 822 / RFC 1123 format: "Wed, 02 Oct 2002 08:00:00 EST"
+    // But Date constructor should handle most of these
+
+    // If all parsing fails, return null
+    return null;
+}
+
 async function scrapeFeeds() {
     const feed = await getNextFeedToFetch();
 
@@ -60,8 +82,28 @@ async function scrapeFeeds() {
     try {
         const rssFeed = await fetchFeed(feed.url);
 
+        let savedCount = 0;
+        let skippedCount = 0;
+
         for (const item of rssFeed.channel.item) {
-            console.log(item.title);
+            const publishedAt = parsePublishedDate(item.pubDate);
+            const post = await createPost(
+                item.title,
+                item.link,
+                item.description || null,
+                publishedAt,
+                feed.id
+            );
+
+            if (post) {
+                savedCount++;
+            } else {
+                skippedCount++;
+            }
+        }
+
+        if (savedCount > 0 || skippedCount > 0) {
+            console.log(`Feed ${feed.name}: saved ${savedCount} posts, skipped ${skippedCount} duplicates`);
         }
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : String(error);
